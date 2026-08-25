@@ -25,6 +25,44 @@
   <script src="js/visual.js" defer></script>
   <script src="js/effects.js" defer></script>
   <script src="js/interaction.js" defer></script>
+  <script>
+  // Altera estritamente a meta tag do navegador sem afetar o background do site
+  function setNavColor(color) {
+    let meta = document.querySelector('meta[name="theme-color"]');
+    if (!meta) {
+      meta = document.createElement('meta');
+      meta.name = 'theme-color';
+      document.head.appendChild(meta);
+    }
+    meta.setAttribute('content', color);
+  }
+
+  // Hover/Toque nos cards
+  document.addEventListener('mouseover', (e) => {
+    const card = e.target.closest('.screen-card');
+    if (card) {
+      const color = card.style.getPropertyValue('--card-color-active') || '#020204';
+      setNavColor(color.trim());
+    }
+  });
+
+  // Reset ao sair do card
+  document.addEventListener('mouseout', (e) => {
+    const card = e.target.closest('.screen-card');
+    if (card && !document.getElementById('modal-overlay').classList.contains('active')) {
+      setNavColor('#020204');
+    }
+  });
+
+  // Reset ao fechar modal
+  const modalEl = document.getElementById('modal-overlay');
+  if (modalEl) {
+    new MutationObserver(() => {
+      if (!modalEl.classList.contains('active')) setNavColor('#020204');
+    }).observe(modalEl, { attributes: true, attributeFilter: ['class'] });
+  }
+</script>
+
 </head>
 
 
