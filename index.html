@@ -27,6 +27,45 @@
 <script src="js/effects.js" defer></script>
 <script src="js/interaction.js" defer></script>
 
+  
+  <script>
+  // Função para trocar a cor da meta tag do navegador
+  function setNavColor(hex) {
+    let meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', hex);
+  }
+
+  // Observador para capturar os eventos dos cards e modais dinamicamente
+  document.addEventListener('mouseover', (e) => {
+    const card = e.target.closest('.screen-card');
+    if (card) {
+      const color = card.style.getPropertyValue('--card-color-active') || '#020204';
+      setNavColor(color.trim());
+    }
+  });
+
+  document.addEventListener('mouseout', (e) => {
+    const card = e.target.closest('.screen-card');
+    if (card && !document.getElementById('modal-overlay').classList.contains('active')) {
+      setNavColor('#020204');
+    }
+  });
+
+  // Monitora a abertura e fechamento do modal para ajustar a cor
+  const modalObserver = new MutationObserver(() => {
+    const modal = document.getElementById('modal-overlay');
+    if (!modal.classList.contains('active')) {
+      setNavColor('#020204');
+    }
+  });
+
+  const modalEl = document.getElementById('modal-overlay');
+  if (modalEl) {
+    modalObserver.observe(modalEl, { attributes: true, attributeFilter: ['class'] });
+  }
+</script>
+
+
 
 </head>
 <body>
