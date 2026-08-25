@@ -1,0 +1,618 @@
+/* ==========================================================================
+   RESET & BASE STYLES
+   ========================================================================== */ 
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+:root {
+  --bg-color: #020204;
+  --color-lilac: #c084fc;
+  --color-violet: #8b5cf6;
+  --color-lime: #84cc16;
+  --color-green: #10b981;
+  --color-magenta: #d946ef;
+  --color-cyan: #06b6d4;
+  --color-deep-purple: #0a0612;
+  --font-main: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg-color);
+  color: #f3f4f6;
+  font-family: var(--font-main);
+  cursor: default;
+  touch-action: none;
+}
+
+/* ==========================================================================
+   EFEITOS CRT (TV ANTIGA / CHUVISCO / DESLIGAMENTO)
+   ========================================================================== */
+#crt-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  pointer-events: none;
+  opacity: 0;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.8s ease-out;
+}
+
+#crt-screen.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#crt-screen.fade-dissolve {
+  opacity: 0;
+}
+
+#crt-static-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.85;
+  mix-blend-mode: screen;
+}
+
+.crt-turn-on {
+  animation: crtOpen 0.9s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+.crt-turn-off {
+  animation: crtClose 0.8s cubic-bezier(0.755, 0.05, 0.855, 0.06) forwards;
+}
+
+@keyframes crtOpen {
+  0% { transform: scale(0, 0.005); opacity: 1; }
+  40% { transform: scale(1, 0.005); opacity: 1; }
+  100% { transform: scale(1, 1); opacity: 1; }
+}
+
+@keyframes crtClose {
+  0% { transform: scale(1, 1); opacity: 1; }
+  50% { transform: scale(1, 0.005); opacity: 0.9; }
+  100% { transform: scale(0, 0); opacity: 0; }
+}
+
+/* ==========================================================================
+   1. INTRO LAYER (3 HA HA HA TRIPLICADO & SEQUÊNCIA TEATRAL)
+   ========================================================================== */
+#intro-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background-color: var(--bg-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), visibility 1s;
+}
+
+#intro-screen.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.intro-container {
+  display: flex;
+  gap: 0.8em;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.ha-word {
+  font-size: clamp(3rem, 10vw, 7.5rem);
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  display: inline-block;
+  opacity: 0;
+  filter: blur(24px);
+  transform: scale(0.2) translateZ(0);
+  animation: haPopTripleSintonize 2.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.ha-word:nth-child(1) {
+  color: var(--color-magenta);
+  animation-delay: 0.45s;
+  text-shadow: 0 0 50px var(--color-magenta), 0 0 100px rgba(217, 70, 239, 0.8);
+}
+.ha-word:nth-child(2) {
+  color: var(--color-lime);
+  animation-delay: 0.65s;
+  text-shadow: 0 0 50px var(--color-lime), 0 0 100px rgba(132, 204, 22, 0.8);
+}
+.ha-word:nth-child(3) {
+  color: var(--color-lilac);
+  animation-delay: 0.85s;
+  text-shadow: 0 0 50px var(--color-lilac), 0 0 100px rgba(192, 132, 252, 0.8);
+}
+
+.feedback-text {
+  font-size: clamp(1.5rem, 4vw, 3rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-lime);
+  text-shadow: 0 0 30px var(--color-lime), 0 0 60px rgba(132, 204, 22, 0.6);
+  opacity: 0;
+  animation: feedbackSinglePop 1.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes feedbackSinglePop {
+  0% { opacity: 0; filter: blur(20px); transform: scale(0.6); }
+  30% { opacity: 1; filter: blur(0px); transform: scale(1.05); }
+  75% { opacity: 1; filter: blur(0px); transform: scale(1); }
+  100% { opacity: 0; filter: blur(15px); transform: scale(1.15); }
+}
+
+@keyframes haPopTripleSintonize {
+  0% { opacity: 0; filter: blur(30px); transform: scale(0.1) rotate(-18deg); }
+  20% { opacity: 0.4; filter: blur(18px); }
+  45% { opacity: 1; filter: blur(0px); transform: scale(1.25) rotate(6deg); }
+  60% { transform: scale(0.92) rotate(-4deg); }
+  80% { opacity: 1; filter: blur(0px); transform: scale(1.1) rotate(2deg); }
+  100% { opacity: 0; filter: blur(30px); transform: scale(2.2) rotate(0deg); }
+}
+
+#flash-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle at center, rgba(217, 70, 239, 0.9) 0%, rgba(132, 204, 22, 0.6) 35%, rgba(192, 132, 252, 0.3) 65%, transparent 100%);
+  transition: opacity 0.6s ease-out;
+}
+
+#flash-overlay.active {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   2. CANVAS & UNIVERSE
+   ========================================================================== */
+#canvas-container {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+#universe {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  perspective: 1200px;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 2s ease-out;
+  pointer-events: none;
+}
+
+#universe.visible {
+  opacity: 1;
+}
+
+#constellation-viewport {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.1s ease-out;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   3. REVEAL PHRASE
+   ========================================================================== */
+#central-phrase {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: clamp(0.75rem, 1.8vw, 1.1rem);
+  font-weight: 600;
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  color: #ffffff;
+  pointer-events: none;
+  z-index: 15;
+  opacity: 0;
+  text-align: center;
+  transition: opacity 1.8s ease, filter 1.8s ease;
+  white-space: nowrap;
+  padding: 12px 28px;
+  background: radial-gradient(ellipse at center, rgba(2, 2, 4, 0.9) 0%, rgba(2, 2, 4, 0) 80%);
+  text-shadow: 0 0 20px rgba(217, 70, 239, 0.9), 0 0 40px rgba(132, 204, 22, 0.7);
+}
+
+#central-phrase.visible {
+  opacity: 0.95;
+  filter: blur(0px);
+}
+
+/* ==========================================================================
+   4. CARDS DE OBRAS (VIDRO ULTRA-ESPECULAR MULTI-FUNDO)
+   ========================================================================== */
+.screen-card {
+  position: absolute;
+  width: 197px;
+  height: 125px;
+  margin-left: -98px;
+  margin-top: -62px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  border-radius: 11px;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.05s linear;
+  z-index: 30 !important;
+  will-change: transform, opacity;
+  pointer-events: auto !important;
+
+  border: 1px solid var(--card-color-active, rgba(255, 255, 255, 0.25));
+  box-shadow: 0 0 12px var(--card-color-active, rgba(255, 255, 255, 0.2)),
+              0 0 24px var(--card-color-shadow, rgba(139, 92, 246, 0.15)),
+              inset 0 0 12px var(--card-color-shadow, rgba(139, 92, 246, 0.1));
+}
+
+.screen-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 11px;
+  background: linear-gradient(
+    135deg, 
+    rgba(255, 255, 255, 0.45) 0%, 
+    rgba(255, 255, 255, 0.12) 25%, 
+    rgba(0, 0, 0, 0.15) 50%, 
+    rgba(0, 0, 0, 0.4) 100%
+  );
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.screen-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 11px;
+  background: radial-gradient(circle at top left, var(--card-color-glow, rgba(255,255,255,0.05)), transparent 75%);
+  opacity: 0.25;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.screen-card:hover, .screen-card.energy-hit {
+  border-color: var(--card-color-active, var(--color-violet));
+  box-shadow: 0 0 20px var(--card-color-active, #ffffff),
+              0 0 45px var(--card-color-shadow, rgba(139, 92, 246, 0.7)),
+              inset 0 0 25px var(--card-color-shadow, rgba(139, 92, 246, 0.35));
+}
+
+.screen-card:hover::before, .screen-card.energy-hit::before {
+  opacity: 1.0;
+}
+
+/* GATILHO FLUTUANTE DA CHARADA */
+#enigma-trigger {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 50;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(10, 10, 16, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--color-lilac);
+  box-shadow: 0 0 15px rgba(192, 132, 252, 0.4), inset 0 0 10px rgba(132, 204, 22, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--color-lime);
+  transition: all 0.3s ease;
+}
+
+#enigma-trigger:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 25px rgba(192, 132, 252, 0.8), 0 0 15px rgba(132, 204, 22, 0.6);
+}
+
+/* ==========================================================================
+   5. MODAL DE OBRAS E CARTA DE BARALHO (CONTATO)
+   ========================================================================== */
+#modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(2, 2, 5, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+#modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-content {
+  width: 100%;
+  max-width: 620px;
+  background: radial-gradient(circle at top left, rgba(12, 12, 20, 0.95) 0%, rgba(4, 4, 8, 0.98) 100%);
+  border: 1px solid var(--modal-color, rgba(255, 255, 255, 0.12));
+  border-radius: 20px;
+  padding: 36px;
+  position: relative;
+  box-shadow: 0 0 30px var(--modal-color, rgba(0, 0, 0, 0.9)),
+              0 20px 60px rgba(0, 0, 0, 0.9),
+              inset 0 0 25px var(--modal-color, rgba(0, 0, 0, 0.2));
+  transform: translateY(20px) scale(0.97);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.modal-content::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  background: radial-gradient(circle at top left, var(--modal-color), transparent 60%);
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+#modal-overlay.active .modal-content {
+  transform: translateY(0) scale(1);
+}
+
+.modal-content.enigma-card {
+  width: 350px;
+  height: 560px;
+  background: rgba(10, 6, 18, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 22px;
+  padding: 30px 24px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  border: 1.5px solid transparent;
+  background-image: linear-gradient(rgba(10, 6, 18, 0.92), rgba(10, 6, 18, 0.92)), 
+                    linear-gradient(135deg, var(--color-lilac), var(--color-lime), var(--color-magenta), var(--color-lilac));
+  background-size: 100% 100%, 300% 300%;
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  animation: auroraBorderCycle 12s ease infinite;
+
+  box-shadow: 0 0 35px rgba(192, 132, 252, 0.35),
+              0 0 70px rgba(132, 204, 22, 0.2);
+}
+
+@keyframes auroraBorderCycle {
+  0% { background-position: 0% 0%, 0% 50%; }
+  50% { background-position: 0% 0%, 100% 50%; }
+  100% { background-position: 0% 0%, 0% 50%; }
+}
+
+.enigma-question-container {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 170px;
+  height: 220px;
+  pointer-events: none;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.4s ease;
+  filter: none !important;
+}
+
+.enigma-question-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: none !important;
+}
+
+.enigma-card-body {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: 100%;
+  justify-content: space-between;
+}
+
+.enigma-input {
+  width: 100%;
+  background: rgba(10, 6, 18, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 10px;
+  padding: 16px;
+  color: #84cc16;
+  font-family: var(--font-main);
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  outline: none;
+  transition: all 0.4s ease;
+
+  border: 1px solid rgba(192, 132, 252, 0.4);
+  box-shadow: inset 0 0 16px rgba(192, 132, 252, 0.25),
+              inset 0 0 6px rgba(132, 204, 22, 0.15);
+}
+
+textarea.enigma-input {
+  resize: none;
+  flex: 1;
+  text-align: center;
+  line-height: 1.4;
+  padding-top: 24px;
+}
+
+textarea.enigma-input::placeholder {
+  color: transparent;
+}
+
+input.enigma-input {
+  text-align: center;
+  height: 52px;
+  flex-shrink: 0;
+}
+
+input.enigma-input::placeholder {
+  color: rgba(132, 204, 22, 0.55);
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+}
+
+.enigma-input:focus {
+  border-color: var(--color-lime);
+  box-shadow: inset 0 0 22px rgba(132, 204, 22, 0.4),
+              inset 0 0 10px rgba(192, 132, 252, 0.3);
+}
+
+.enigma-submit-btn {
+  width: 100%;
+  height: 52px;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #3f6212 0%, #65a30d 50%, #84cc16 100%);
+  background-size: 200% 200%;
+  border: 1px solid rgba(132, 204, 22, 0.7);
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(101, 163, 13, 0.4);
+  animation: buttonShimmerPulse 6s ease infinite;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+@keyframes buttonShimmerPulse {
+  0% { background-position: 0% 50%; filter: brightness(0.9); }
+  50% { background-position: 100% 50%; filter: brightness(1.15); }
+  100% { background-position: 0% 50%; filter: brightness(0.9); }
+}
+
+.enigma-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(132, 204, 22, 0.7);
+}
+
+.modal-category {
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--modal-color, var(--color-lilac));
+  margin-bottom: 12px;
+}
+
+.modal-title {
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 16px;
+  line-height: 1.1;
+  text-shadow: 0 0 20px var(--modal-color, rgba(255, 255, 255, 0.2));
+}
+
+.modal-tagline {
+  font-size: 1rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 24px;
+  border-left: 2px solid var(--modal-color, var(--color-lilac));
+  padding-left: 16px;
+}
+
+.modal-description {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.65);
+  margin-bottom: 32px;
+}
+
+.btn-return {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  padding: 10px 24px;
+  border-radius: 40px;
+  font-family: var(--font-main);
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-return:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--modal-color, var(--color-lilac));
+  box-shadow: 0 0 20px rgba(192, 132, 252, 0.2);
+}
+
+#blackout-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #000;
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .screen-card {
+    width: 153px;
+    height: 98px;
+    margin-left: -76px;
+    margin-top: -49px;
+  }
+  .modal-content { padding: 24px; }
+  .modal-content.enigma-card { width: 310px; height: 500px; padding: 22px 18px; }
+  .enigma-question-container { width: 140px; height: 180px; }
+}
