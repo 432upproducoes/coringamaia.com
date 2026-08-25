@@ -28,15 +28,21 @@
 <script src="js/effects.js" defer></script>
 <script src="js/interaction.js" defer></script>
 
-  
   <script>
-  // Função para trocar a cor da meta tag do navegador
-  function setNavColor(hex) {
+  // Altera a cor no Chrome (Android) e força repintura do background no Safari (iPad)
+  function setNavColor(color) {
     let meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', hex);
+    if (!meta) {
+      meta = document.createElement('meta');
+      meta.name = 'theme-color';
+      document.head.appendChild(meta);
+    }
+    meta.setAttribute('content', color);
+    document.documentElement.style.backgroundColor = color;
+    document.body.style.backgroundColor = color;
   }
 
-  // Observador para capturar os eventos dos cards e modais dinamicamente
+  // Hover/Toque nos cards
   document.addEventListener('mouseover', (e) => {
     const card = e.target.closest('.screen-card');
     if (card) {
@@ -45,6 +51,7 @@
     }
   });
 
+  // Reset ao sair do card
   document.addEventListener('mouseout', (e) => {
     const card = e.target.closest('.screen-card');
     if (card && !document.getElementById('modal-overlay').classList.contains('active')) {
@@ -52,19 +59,15 @@
     }
   });
 
-  // Monitora a abertura e fechamento do modal para ajustar a cor
-  const modalObserver = new MutationObserver(() => {
-    const modal = document.getElementById('modal-overlay');
-    if (!modal.classList.contains('active')) {
-      setNavColor('#020204');
-    }
-  });
-
+  // Reset ao fechar modal
   const modalEl = document.getElementById('modal-overlay');
   if (modalEl) {
-    modalObserver.observe(modalEl, { attributes: true, attributeFilter: ['class'] });
+    new MutationObserver(() => {
+      if (!modalEl.classList.contains('active')) setNavColor('#020204');
+    }).observe(modalEl, { attributes: true, attributeFilter: ['class'] });
   }
 </script>
+
 
 
 
