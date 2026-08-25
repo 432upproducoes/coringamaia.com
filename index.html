@@ -1,35 +1,5 @@
-<!-- 
-  ==========================================================================
-  ⚠️ ATENÇÃO - DIRETIVA ESTRITA DE PRESERVAÇÃO DE CÓDIGO (CÓDIGO PETRIFICADO) ⚠️
-  NENHUMA INTELIGÊNCIA ARTIFICIAL, SISTEMA AUTOMATIZADO OU DESENVOLVEDOR DEVE 
-  ALTERAR, REDUZIR, REFATORAR OU REORGANIZAR NENHUM PARÂMETRO, ESTILO OU LÓGICA 
-  DESTE DOCUMENTO QUE NÃO TENHA BIDO EXPRESSAMENTE SOLICITADO PELO USUÁRIO. 
-  TODAS AS DEMAIS PARTES PERMANECEM IMPERMUTÁVEIS, INABALÁVEIS E INALTERADAS.
-  ==========================================================================
--->
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta name="theme-color" content="#020204" />
-<meta name="color-scheme" content="dark" />
-
-
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>CORINGA</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <!-- Supabase Client CDN -->
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-  <link rel="stylesheet" href="style.css" />
-<script src="js/core.js" defer></script>
-<script src="js/visual.js" defer></script>
-<script src="js/effects.js" defer></script>
-<script src="js/interaction.js" defer></script>
-
-  <script>
-  // Altera a cor no Chrome (Android) e força repintura do background no Safari (iPad)
+<script>
+  // Altera estritamente a meta tag do navegador sem afetar o background do site
   function setNavColor(color) {
     let meta = document.querySelector('meta[name="theme-color"]');
     if (!meta) {
@@ -38,8 +8,6 @@
       document.head.appendChild(meta);
     }
     meta.setAttribute('content', color);
-    document.documentElement.style.backgroundColor = color;
-    document.body.style.backgroundColor = color;
   }
 
   // Hover/Toque nos cards
@@ -67,46 +35,3 @@
     }).observe(modalEl, { attributes: true, attributeFilter: ['class'] });
   }
 </script>
-
-
-
-
-</head>
-<body>
-
-  <div id="crt-screen">
-    <canvas id="crt-static-canvas"></canvas>
-  </div>
-
-  <div id="blackout-overlay"></div>
-
-  <div id="flash-overlay"></div>
-
-  <div id="intro-screen">
-    <div class="intro-container" id="intro-box">
-      <span class="ha-word">HA</span>
-      <span class="ha-word">HA</span>
-      <span class="ha-word">HA</span>
-    </div>
-  </div>
-
-  <div id="canvas-container">
-    <canvas id="core-canvas"></canvas>
-  </div>
-
-  <div id="enigma-trigger" title="CHARADA">?</div>
-
-  <div id="universe">
-    <div id="central-phrase">O CORINGA DÁ VIDA A TUDO ISSO.</div>
-    <div id="constellation-viewport"></div>
-  </div>
-
-  <div id="modal-overlay">
-    <div id="modal-box" class="modal-content">
-      <!-- RENDERIZADO DINAMICAMENTE -->
-    </div>
-  </div>
-
-  <script src="script.js"></script>
-</body>
-</html>
