@@ -7,63 +7,22 @@
   TODAS AS DEMAIS PARTES PERMANECEM IMPERMUTÁVEIS, INABALÁVEIS E INALTERADAS.
   ==========================================================================
 -->
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>CORINGA</title>
-  
-  <!-- Força a barra do navegador no Android e iOS/iPadOS a fixar no tom escuro -->
-  <meta name="theme-color" content="#020204" />
-  <meta name="color-scheme" content="dark" />
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <!-- Supabase Client CDN -->
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <link rel="stylesheet" href="style.css" />
-  <script src="js/core.js" defer></script>
-  <script src="js/visual.js" defer></script>
-  <script src="js/effects.js" defer></script>
-  <script src="js/interaction.js" defer></script>
-  <script>
-  // Altera estritamente a meta tag do navegador sem afetar o background do site
-  function setNavColor(color) {
-    let meta = document.querySelector('meta[name="theme-color"]');
-    if (!meta) {
-      meta = document.createElement('meta');
-      meta.name = 'theme-color';
-      document.head.appendChild(meta);
-    }
-    meta.setAttribute('content', color);
-  }
-
-  // Hover/Toque nos cards
-  document.addEventListener('mouseover', (e) => {
-    const card = e.target.closest('.screen-card');
-    if (card) {
-      const color = card.style.getPropertyValue('--card-color-active') || '#020204';
-      setNavColor(color.trim());
-    }
-  });
-
-  // Reset ao sair do card
-  document.addEventListener('mouseout', (e) => {
-    const card = e.target.closest('.screen-card');
-    if (card && !document.getElementById('modal-overlay').classList.contains('active')) {
-      setNavColor('#020204');
-    }
-  });
-
-  // Reset ao fechar modal
-  const modalEl = document.getElementById('modal-overlay');
-  if (modalEl) {
-    new MutationObserver(() => {
-      if (!modalEl.classList.contains('active')) setNavColor('#020204');
-    }).observe(modalEl, { attributes: true, attributeFilter: ['class'] });
-  }
-</script>
-
-</head>
+<script src="js/core.js" defer></script>
+<script src="js/visual.js" defer></script>
+<script src="js/effects.js" defer></script>
+<script src="js/interaction.js" defer></script>
 
 
 </head>
@@ -92,7 +51,7 @@
   <div id="enigma-trigger" title="CHARADA">?</div>
 
   <div id="universe">
-    <div id="central-phrase">O CORINGA DÁ VIDA A TUDO ISSO.</div>
+    <div id="central-phrase">O CORINGA MAIA DÁ VIDA A TUDO ISSO.</div>
     <div id="constellation-viewport"></div>
   </div>
 
